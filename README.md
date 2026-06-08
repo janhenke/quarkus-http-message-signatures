@@ -32,16 +32,17 @@ Configure the extension inside your application's `src/main/resources/applicatio
 
 ```properties
 # Enable or disable the extension functionality globally
-quarkus.http-signatures.enabled=true
-
+quarkus.http.signatures.enabled=true
+ 
 # Mandate minimum components that must be covered by incoming signatures
-quarkus.http-signatures.required-components=@method,@target-uri,@authority,date
-
-# Specify permitted signature algorithms (e.g., rsa-pss-sha512, ecdsa-p256-sha256, ed25519)
-quarkus.http-signatures.allowed-algorithms=rsa-pss-sha512,ecdsa-p256-sha256
-
-# Authlete integration settings
-quarkus.http-signatures.authlete.key-store-path=META-INF/resources/ke
+quarkus.http.signatures.verify.required-components=@method,@target-uri,@authority,date
+ 
+# Specify permitted signature algorithms
+quarkus.http.signatures.verify.allowed-algorithms=rsa-pss-sha512,ecdsa-p256-sha256
+ 
+# Key configuration
+quarkus.http.signatures.keys.my-key.path=keys/public-key.pem
+quarkus.http.signatures.keys.my-key.type=PEM
 ```
 
 ## 🏗️ Project Structure

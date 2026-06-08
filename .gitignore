@@ -17,6 +17,7 @@ target/
 *.iml
 *.ipr
 out/
+.junie/
 
 # Eclipse
 .classpath
