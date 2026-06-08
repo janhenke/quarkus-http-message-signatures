@@ -40,9 +40,13 @@ quarkus.http.signatures.verify.required-components=@method,@target-uri,@authorit
 # Specify permitted signature algorithms
 quarkus.http.signatures.verify.allowed-algorithms=rsa-pss-sha512,ecdsa-p256-sha256
  
-# Key configuration
-quarkus.http.signatures.keys.my-key.path=keys/public-key.pem
+# Key configuration (PEM example)
+quarkus.http.signatures.keys.my-key.location=keys/public-key.pem
 quarkus.http.signatures.keys.my-key.type=PEM
+
+# Key configuration (JWKS example)
+quarkus.http.signatures.keys.external-key.location=https://auth.example.com/.well-known/jwks.json
+quarkus.http.signatures.keys.external-key.type=JWKS
 ```
 
 ## 🏗️ Project Structure

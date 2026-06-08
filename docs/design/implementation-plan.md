@@ -9,9 +9,15 @@ The goal is to implement a Quarkus extension that provides support for RFC 9421 
 - **Authlete http-message-signatures**: Used for parsing, serializing, and cryptographic operations.
 - **Dependency**: `com.authlete:http-message-signatures`
 
-### 1.2 Configuration (`runtime`)
-The extension will provide configuration properties to control its behavior, aligning with Quarkus conventions for security and HTTP.
- 
+### 1.2 Core Dependencies (Quarkus)
+To avoid re-inventing key handling and security infrastructure, the extension will build upon:
+- **`quarkus-security`**: Provides the base security APIs, `SecurityIdentity`, and `IdentityProvider`.
+- **`quarkus-credentials`**: Provides the `CredentialsProvider` API for secure secret retrieval.
+- **`quarkus-vertx-http`**: For integration with the Vert.x HTTP layer.
+
+### 1.3 Configuration (`runtime`)
+The extension will provide configuration properties to control its behavior, aligning with Quarkus conventions for security and HTTP. To maintain consistency and reduce implementation overhead, the configuration model for keys will follow patterns established by the `quarkus-oidc` and `quarkus-smallrye-jwt` extensions.
+
 - `quarkus.http.signatures.enabled`: (Boolean) Enable/disable the extension.
 - `quarkus.http.signatures.verify.enabled`: (Boolean) Enable verification of incoming requests.
 - `quarkus.http.signatures.verify.policy`: (Enum) `PERMISSIVE` (verify if present), `ENFORCED` (fail if missing or invalid). Default: `ENFORCED`.
@@ -20,9 +26,11 @@ The extension will provide configuration properties to control its behavior, ali
 - `quarkus.http.signatures.verify.max-skew`: (Duration) Allowed clock skew for `created` parameter.
 - `quarkus.http.signatures.sign.enabled`: (Boolean) Enable signing of outgoing messages.
 - `quarkus.http.signatures.keys`: Key configuration for signing and verification.
-    - `quarkus.http.signatures.keys.<id>.path`: Path to PEM or JWK file.
-    - `quarkus.http.signatures.keys.<id>.password`: (Optional) Password for encrypted keys or KeyStores.
-    - `quarkus.http.signatures.keys.<id>.type`: (Enum) `PEM`, `JWK`, `KEYSTORE`.
+    - `quarkus.http.signatures.keys.<id>.location`: Path or URL to the key (PEM, JWK, or JWKS).
+    - `quarkus.http.signatures.keys.<id>.key-store-file`: (Optional) Path to KeyStore.
+    - `quarkus.http.signatures.keys.<id>.password`: (Optional) Password for KeyStore or private key.
+    - `quarkus.http.signatures.keys.<id>.secret-provider.key`: (Optional) Key for `CredentialsProvider` integration.
+    - `quarkus.http.signatures.keys.<id>.type`: (Enum) `PEM`, `JWK`, `JWKS`, `KEYSTORE`.
 
 ### 1.3 Integration Points
 - **Vert.x HTTP**: Use `HttpAuthenticationMechanism` for verifying incoming signatures and `HttpServerResponse` interceptors for signing outgoing responses. This ensures the extension works across all Quarkus web frameworks (RESTEasy Reactive, RESTEasy Classic, Reactive Routes).
@@ -45,8 +53,10 @@ The extension will provide configuration properties to control its behavior, ali
     - Implement `SignatureContext` using Vert.x `RoutingContext` (server) and JAX-RS `ClientRequestContext` (client).
     - Provide `SignatureService` to encapsulate Authlete library calls.
 - **Key Handling**:
-    - Use `KeyStore` and `KeyFactory` to load keys based on configuration.
-    - Support for SmallRye Config secret encryption for passwords.
+    - Leverage Quarkus `KeyUtils` (from `quarkus-security`) and standard security configurations where possible.
+    - Support loading public keys from JWKS URLs (similar to OIDC).
+    - Support for `CredentialsProvider` (via `quarkus-credentials`) to handle key passwords and secrets securely.
+    - Avoid deep coupling with `quarkus-oidc` to keep dependencies minimal, but mirror its configuration style for a better developer experience.
 
 ### 2.2 Deployment Module
 - **Processors**:
