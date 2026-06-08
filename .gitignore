@@ -1,0 +1,43 @@
+# === Target & Build Outputs ===
+target/
+**/target/
+*.jar
+*.war
+*.ear
+
+# === Quarkus Specific ===
+.quarkus/
+**/build/
+.factorypath
+
+# === IDEs & Editors ===
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+.springBeans
+
+# Visual Studio Code
+.vscode/
+
+# === OS & System Files ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Logs & Crash Reports ===
+*.log
+hs_err_pid*
+replay_pid*
+
+# === Native Compilation Artifacts (GraalVM) ===
+*.build_artifacts.txt
+reports/
+
