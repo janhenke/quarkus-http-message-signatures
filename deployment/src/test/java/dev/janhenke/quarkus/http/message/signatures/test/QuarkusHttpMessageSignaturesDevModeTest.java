@@ -1,6 +1,7 @@
 package dev.janhenke.quarkus.http.message.signatures.test;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,10 @@ public class QuarkusHttpMessageSignaturesDevModeTest
 	// Start hot reload (DevMode) test with your extension loaded
 	@RegisterExtension
 	static final QuarkusDevModeTest devModeTest = new QuarkusDevModeTest().setArchiveProducer(() -> ShrinkWrap.create(
-			JavaArchive.class));
+			JavaArchive.class).addAsResource(new StringAsset("""
+					                                                 quarkus.http.signatures.verify.allowed-algorithms=foobar
+					                                                 quarkus.http.signatures.verify.required-components=foobar
+					                                                 """), "application.properties"));
 
 	@Test
 	public void writeYourOwnDevModeTest()

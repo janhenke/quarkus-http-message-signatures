@@ -17,10 +17,24 @@
             <artifactId>quarkus-arc-deployment</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-credentials-deployment</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-security-deployment</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-vertx-http-deployment</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>io.github.janhenke</groupId>
             <artifactId>quarkus-http-message-signatures</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit-internal</artifactId>

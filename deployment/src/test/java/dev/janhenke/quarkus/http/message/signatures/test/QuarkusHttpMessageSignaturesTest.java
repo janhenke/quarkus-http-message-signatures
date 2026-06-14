@@ -13,7 +13,13 @@ public class QuarkusHttpMessageSignaturesTest
 
 	// Start unit test with your extension loaded
 	@RegisterExtension
-	static final QuarkusUnitTest unitTest = new QuarkusUnitTest().setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
+	static final QuarkusUnitTest unitTest = new QuarkusUnitTest().setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class))
+	                                                             .overrideConfigKey(
+			                                                             "quarkus.http.signatures.verify.allowed-algorithms",
+			                                                             "foobar")
+	                                                             .overrideConfigKey(
+			                                                             "quarkus.http.signatures.verify.required-components",
+			                                                             "foobar");
 
 	@Test
 	public void writeYourOwnUnitTest()
