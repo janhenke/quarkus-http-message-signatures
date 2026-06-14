@@ -11,95 +11,152 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-/// Configuration for the HTTP message signatures extension.
-///
-/// @author Jan Henke
+/**
+ * Configuration for the HTTP message signatures extension.
+ *
+ * @author Jan Henke
+ */
 @ConfigMapping(prefix = "quarkus.http.signatures")
 @ConfigRoot(phase = ConfigPhase.RUN_TIME)
 public interface HttpMessageSignaturesConfig
 {
-	/// `true` if the extension is enabled, `false` otherwise.
+	/**
+	 * Returns {@code true} if the extension is enabled, {@code false} otherwise.
+	 */
 	@WithDefault("true")
 	boolean enabled();
 
-	/// Configuration for the signature verification.
+	/**
+	 * Configuration for the signature verification.
+	 *
+	 */
 	VerifyConfig verify();
 
-	/// Configuration for the signature creation.
+	/**
+	 * Configuration for the signature creation.
+	 */
 	SignConfig sign();
 
-	/// The list of keys used for signature creation and verification.
+	/**
+	 * The list of keys used for signature creation and verification.
+	 */
 	Map<String, KeyConfig> keys();
 
-	/// Configuration for the signature verification.
+	/**
+	 * Configuration for the signature verification.
+	 */
 	@ConfigGroup
 	interface VerifyConfig
 	{
-		/// `true` if the signature verification is enabled, `false` otherwise.
+		/**
+		 * {@code true} if the signature verification is enabled, {@code false} otherwise.
+		 */
 		@WithDefault("true")
 		boolean enabled();
 
-		/// The policy for the signature verification.
+		/**
+		 * The policy for the signature verification.
+		 */
 		@WithDefault("ENFORCED")
 		Policy policy();
 
-		/// The list of required components.
+		/**
+		 * The list of required components.
+		 */
 		List<String> requiredComponents();
 
-		/// The list of allowed algorithms.
+		/**
+		 * The list of allowed algorithms.
+		 */
 		List<String> allowedAlgorithms();
 
-		/// The maximum skew allowed for the signature.
+		/**
+		 * The maximum skew allowed for the signature.
+		 */
 		@WithDefault("PT5M")
 		Duration maxSkew();
 
-		/// The policy for the signature verification.
+		/**
+		 * The policy for the signature verification.
+		 */
+		@ConfigGroup
 		enum Policy
 		{
-			/// The signature verification is enforced.
+			/**
+			 * The signature verification is enforced.
+			 */
 			ENFORCED,
-			/// The signature verification is permissive.
+			/**
+			 * The signature verification is permissive.
+			 */
 			PERMISSIVE
 		}
 	}
 
-	/// Configuration for the signature creation.
+	/**
+	 * Configuration for the signature creation.
+	 */
 	@ConfigGroup
 	interface SignConfig
 	{
-		/// `true` if the signature creation is enabled, `false` otherwise.
+		/**
+		 * {@code true} if the signature creation is enabled, {@code false} otherwise.
+		 */
 		@WithDefault("true")
 		boolean enabled();
 	}
 
-	/// Configuration for the keys used for signature creation and verification.
+	/**
+	 * Configuration for the keys used for signature creation and verification.
+	 */
 	@ConfigGroup
 	interface KeyConfig
 	{
-		/// The location of the key. Either a file path or a URL.
+		/**
+		 * The location of the key. Either a file path or a URL.
+		 */
 		Optional<String> location();
 
-		/// The type of the key.
+		/**
+		 * The type of the key.
+		 */
 		Type type();
 
-		/// An optional path to the key store file.
+		/**
+		 * An optional path to the key store file.
+		 */
 		Optional<Path> keyStoreFile();
 
-		/// The password for the encrypted keys or key store file.
+		/**
+		 * The password for the encrypted keys or key store file.
+		 */
 		Optional<String> password();
 
-		/// An optional secret provider to use for the key.
+		/**
+		 * An optional secret provider to use for the key.
+		 */
 		Optional<String> secretProvider();
 
+		/**
+		 * The type of the key.
+		 */
 		enum Type
 		{
-			/// Privacy Enhanced Mail format
+			/**
+			 * Privacy Enhanced Mail format
+			 */
 			PEM,
-			/// JSON Web Key
+			/**
+			 * JSON Web Key
+			 */
 			JWK,
-			/// JSON Web Key Set
+			/**
+			 * JSON Web Key Set
+			 */
 			JWKS,
-			/// Java Keystore
+			/**
+			 * Java Keystore
+			 */
 			KEYSTORE
 		}
 	}
